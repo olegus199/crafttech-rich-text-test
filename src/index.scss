@@ -1,0 +1,16 @@
+@use "./variables" as *;
+
+@import url("https://fonts.googleapis.com/css2?family=Onest:wght@100..900&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Onest", sans-serif;
+  font-synthesis: none !important;
+  -webkit-font-smoothing: antialiased;
+  color: $black;
+}
