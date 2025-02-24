@@ -4,7 +4,7 @@ const Control = ({ tool, setTool }: any) => {
   };
 
   return (
-    <div style={{ position: "absolute", top: 0 }}>
+    <div>
       <div>
         <input
           type="radio"
