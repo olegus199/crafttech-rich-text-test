@@ -1,7 +1,7 @@
 @use "./variables" as *;
 
 .main {
-  padding: 3.125rem 1rem;
+  padding: 3.125rem 0;
 }
 
 .h1 {
@@ -12,6 +12,21 @@
   text-align: center;
 }
 
-.konvaContainer {
-  margin-top: 2rem;
+.editor_wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba($black, .3);
+  backdrop-filter: blur(.25rem);
+  -webkit-backdrop-filter: blur(.25rem);
+  z-index: 999;
+}
+
+.konva_container {
+  margin-top: 4rem;
 }

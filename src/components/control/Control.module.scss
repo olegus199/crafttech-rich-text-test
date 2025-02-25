@@ -1,0 +1,38 @@
+@use "../../variables" as *;
+
+.control_container {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  max-width: 70rem;
+  margin: 0 auto;
+}
+
+.tool {
+  display: flex;
+  align-items: center;
+  padding: .625rem .875rem;
+  font-weight: 500;
+  border-radius: .5rem;
+  color: $gray_100;
+  cursor: pointer;
+
+  &:not(:last-child) {
+    margin-right: 1.5rem;
+  }
+}
+
+.selected {
+  color: $primary_100;
+  background-color: $white;
+  box-shadow: 0 0 .75rem rgba($black, 0.03);
+}
+
+.tool_icon {
+  flex-shrink: 0;
+  margin-right: .75rem;
+}
+
+.tool_locales {
+  cursor: inherit;
+}
