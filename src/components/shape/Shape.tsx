@@ -1,75 +1,97 @@
 import html2canvas from "html2canvas";
 import Konva from "konva";
-import { useEffect, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { Group, Rect } from "react-konva";
-import { Html } from "react-konva-utils";
-import HtmlText from "../htmlText/HtmlText";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux-hooks.tsx";
+import { selectTool } from "../../state/toolSlice.ts";
+import { NodeConfig } from "konva/lib/Node";
+import * as React from "react";
+import { editorShown } from "../../state/editorVisibleSlice.ts";
+import {
+  selectKonvaImages,
+} from "../../state/konvaImagesSlice.ts";
 
-const Shape = (props: any) => {
-  const { x, y, width, height, tool, html, id, text } = props;
-  const [isEditing, setIsEditing] = useState(false);
-  const [value, setValue] = useState(text);
+interface ShapeProps {
+  nodeConfig: NodeConfig;
+}
 
-  const groupRef = useRef<any>(null);
-  const imageRef = useRef<any>(null);
-  const htmlRef = useRef<any>(null);
-  const renderImage = async () => {
-    const htmltext = document.getElementById(`htmltext_${id}`);
-    if (htmltext) {
-      const innerhtml = htmltext.innerHTML;
-      if (innerhtml) {
-        const canvas = await html2canvas(htmltext, {
-          backgroundColor: "rgba(0,0,0,0)",
-        });
-        const shape = new Konva.Image({
-          x: 0,
-          y: height / 2,
-          scaleX: 1 / window.devicePixelRatio,
-          scaleY: 1 / window.devicePixelRatio,
-          image: canvas,
-        });
-        groupRef.current.add(shape);
-        imageRef.current = shape;
-      } else return;
-    } else return;
-  };
+const Shape: FC<ShapeProps> = ({ nodeConfig: { width, height, x, y, id } }) => {
+  const selectedTool = useAppSelector(selectTool);
+  const konvaImage = useAppSelector(selectKonvaImages).find((i) => i.id === id);
+
+  const dispatch = useAppDispatch();
+
+  const groupRef = useRef<Konva.Group>(null);
+  const imageRef = useRef<Konva.Image>(null);
+
+  async function renderImage(html: string): Promise<void> {
+    try {
+      let editorHtml = new DOMParser().parseFromString(html, "text/html");
+      const body = editorHtml.body;
+      body.className = "temp-editor-body";
+
+      const tempContainer = document.createElement("div");
+      tempContainer.style.width = "fit-content";
+      tempContainer.style.minWidth = "12.5rem";
+      tempContainer.appendChild(body);
+      document.body.appendChild(tempContainer);
+
+      const canvas = await html2canvas(tempContainer);
+
+      document.body.removeChild(tempContainer);
+
+      const shape = new Konva.Image({
+        x: 0,
+        y: height !== undefined ? height + 10 : 0,
+        scaleX: 1 / window.devicePixelRatio,
+        scaleY: 1 / window.devicePixelRatio,
+        image: canvas,
+      });
+
+      groupRef.current?.add(shape);
+      imageRef.current = shape;
+
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  function handleGroupClick(): void {
+    if (selectedTool === "shape") {
+      return;
+    }
+
+    // imageRef.current?.hide();
+
+    if (id) {
+      dispatch(editorShown({
+        id,
+      }));
+    }
+
+  }
 
   useEffect(() => {
-    renderImage();
-  }, []);
-
-  const handleClick = () => {
-    if (tool === "shape") {
-      return;
-    } else {
-      setIsEditing((prev) => !prev);
-      if (imageRef.current) {
-        if (isEditing) {
-          imageRef.current.show();
-        } else {
-          imageRef.current.hide();
-        }
-      } else return;
+    if (konvaImage) {
+      renderImage(konvaImage.html);
     }
-  };
-
-  const handleInput = (e: any) => {
-    setValue(e.target.value);
-  };
+  }, [konvaImage]);
 
   return (
     <>
-      <Group x={x} y={y} onClick={handleClick} ref={groupRef} draggable>
-        <Rect stroke={"black"} width={width} height={height} />
-        {isEditing && (
-          <Html>
-            <textarea value={value} onChange={handleInput} />
-          </Html>
-        )}
+      <Group
+        ref={groupRef}
+        x={x}
+        y={y}
+        onClick={handleGroupClick}
+        draggable
+      >
+        <Rect
+          stroke={"black"}
+          width={width}
+          height={height}
+        />
       </Group>
-      <Html>
-        <HtmlText ref={htmlRef} html={html} id={id} />
-      </Html>
     </>
   );
 };
