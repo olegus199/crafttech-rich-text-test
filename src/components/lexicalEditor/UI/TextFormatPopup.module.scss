@@ -1,0 +1,22 @@
+@use "../../../variables" as *;
+
+@keyframes fade_in {
+  from {
+    transform: translateY(0.75rem) scale(0.95);
+  }
+  to {
+    transform: translateY(0) scale(1);
+  }
+}
+
+.popup {
+  position: absolute;
+  padding: 0.625rem 0.875rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+  background-color: $gray_300;
+  border-radius: 0.5rem;
+  text-align: center;
+  animation: fade_in 0.2s ease-out forwards;
+  z-index: 99;
+}

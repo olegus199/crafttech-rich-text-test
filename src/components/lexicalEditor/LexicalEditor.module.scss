@@ -1,0 +1,245 @@
+@use "../../variables" as *;
+@use "../../mixins" as *;
+
+$toolbar_transition: 0.15s ease-out;
+
+.editor_container {
+  @include hide_scrollbar();
+
+  margin: 0 auto;
+  background-color: $white;
+  box-shadow: 0 0 .875rem rgba($black, 0.03);
+  width: 100%;
+  max-width: 60rem;
+  overflow: scroll;
+}
+
+.toolbar {
+  display: flex;
+  align-items: stretch;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid $gray_200;
+}
+
+.toolbar_button {
+  @include reset_button_defaults();
+
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  background-color: transparent;
+  color: $black;
+  border-radius: 0.5rem;
+  transition: background-color $toolbar_transition;
+
+  imgdisabled {
+    color: $gray_200;
+    cursor: not-allowed;
+
+    &:hover {
+      background-color: transparent;
+    }
+  }
+
+  &:hover {
+    background-color: $gray_300;
+  }
+
+  &:not(:last-child) {
+    margin-right: 0.625rem;
+  }
+}
+
+.toolbar_icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.toolbar_divider {
+  width: 1px;
+  border: none;
+  margin: 0 0.75rem;
+  background-color: $gray_200;
+}
+
+.history_container {
+  display: flex;
+  align-items: center;
+  margin: 0.5rem 0;
+}
+
+.heading_selection_container,
+.insert_actions_container,
+.align_selection_container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.dropdown_toggle_icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: $primary_100;
+  margin-right: 0.75rem;
+}
+
+.dropdown_toggle_button {
+  &:not(:last-child) {
+    margin-right: 0;
+  }
+}
+
+.dropdown_toggle_toggled {
+  background-color: $gray_300;
+
+  .dropdown_toggle_chevron {
+    transform: rotate(180deg);
+  }
+}
+
+.dropdown_toggle_p {
+  width: max-content;
+  font-weight: 500;
+  font-size: 1rem;
+  margin-right: 0.75rem;
+}
+
+.dropdown_toggle_chevron {
+  transition: transform $toolbar_transition;
+}
+
+.dropdown {
+  position: absolute;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 13rem;
+  background-color: $white;
+
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(1.25rem) scale(0.95);
+  transition: transform $toolbar_transition, opacity $toolbar_transition;
+  z-index: 3;
+}
+
+.dropdown_content {
+  position: relative;
+  padding: 1rem 0;
+  border-radius: 0.5rem;
+  background-color: $white;
+  border: 1px solid $gray_200;
+  z-index: 2;
+}
+
+.dropdown_visible {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.dropdown_button {
+  @include reset_button_defaults();
+
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  font-size: 1rem;
+  color: $gray_100;
+
+  .dropdown_toggle_icon {
+    color: inherit;
+  }
+
+  &:not(:last-child) {
+    margin-bottom: 0.5rem;
+  }
+
+  &:hover {
+    color: $black;
+
+    .dropdown_toggle_icon {
+      color: $primary_100;
+    }
+  }
+}
+
+.dropdown_button_active {
+  padding: 0.5rem 1.25rem;
+  color: $black;
+
+  .dropdown_toggle_icon {
+    color: $primary_100;
+  }
+
+  &::after {
+    position: absolute;
+    top: 0;
+    left: -1px;
+    width: 0.25rem;
+    height: 100%;
+    background-color: $primary_100;
+    content: "";
+  }
+}
+
+.text_actions_container {
+  flex-shrink: 0;
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.button_text_format {
+  color: $gray_100;
+}
+
+.text_format_active {
+  color: $black;
+}
+
+.placeholder {
+  position: absolute;
+  top: 2.25rem;
+  left: 2.25rem;
+  color: $gray_100;
+  pointer-events: none;
+}
+
+.editor_text_input {
+  position: relative;
+}
+
+.content_editable {
+  position: relative;
+  min-height: 22rem;
+  padding: 2.25rem 2rem;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.save_button {
+  @include reset_button_defaults();
+  margin-left: auto;
+  padding: 1.25rem 1.5rem;
+  font-size: .875rem;
+  font-weight: 500;
+  color: $gray_100;
+  transition: color $toolbar_transition;
+
+  &:hover {
+    color: $primary_100;
+  }
+}
