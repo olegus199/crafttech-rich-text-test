@@ -9,10 +9,9 @@ import { editorShown } from "../../state/editorVisibleSlice.ts";
 import {
   selectKonvaImages,
 } from "../../state/konvaImagesSlice.ts";
-import { shapeColors } from "../../colors.ts";
 import {
   CustomShapesConfig,
-  figureIdxToEditChanged,
+  figureIdxToEditChanged, selectEditedInputs,
   selectFigureIdxToEdit,
 } from "../../state/figuresSlice.ts";
 
@@ -21,9 +20,12 @@ interface ShapeProps {
   idx: number;
 }
 
+const HEIGHT_PADDING = 10;
+
 const Shape: FC<ShapeProps> = ({ nodeConfig, idx }) => {
   const { width, height, x, y, id, strokeWidth, stroke, fill } = nodeConfig;
 
+  const inputData = useAppSelector(selectEditedInputs);
   const selectedTool = useAppSelector(selectTool);
   const konvaImage = useAppSelector(selectKonvaImages).find((i) => i.id === id);
   const figureIdxToEdit = useAppSelector(selectFigureIdxToEdit);
@@ -52,7 +54,7 @@ const Shape: FC<ShapeProps> = ({ nodeConfig, idx }) => {
 
       const shape = new Konva.Image({
         x: 0,
-        y: height !== undefined ? height + 10 : 0,
+        y: height !== undefined ? height + HEIGHT_PADDING : 0,
         scaleX: 1 / window.devicePixelRatio,
         scaleY: 1 / window.devicePixelRatio,
         image: canvas,
@@ -113,6 +115,16 @@ const Shape: FC<ShapeProps> = ({ nodeConfig, idx }) => {
       }
     }
   }, [figureIdxToEdit]);
+
+  useEffect(() => {
+    if (idx === figureIdxToEdit) {
+      if (inputData) {
+        if (inputData.height) {
+          imageRef.current?.y(inputData.height + HEIGHT_PADDING);
+        }
+      }
+    }
+  }, [inputData?.height, figureIdxToEdit]);
 
   useEffect(() => {
     if (selectedTool !== "edit") {
