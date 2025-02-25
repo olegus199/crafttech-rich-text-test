@@ -1,8 +1,8 @@
 import styles from "../LexicalEditor.module.scss";
 import { useSelector } from "react-redux";
-import { CurrentlyVisibleDropdown } from "../../../../types";
 import { FC, PropsWithChildren } from "react";
 import { RootState } from "../../../state/store.ts";
+import { CurrentlyVisibleDropdown } from "../../../types.ts";
 
 interface DropdownProps {
   kind: CurrentlyVisibleDropdown;
