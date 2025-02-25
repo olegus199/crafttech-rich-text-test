@@ -1,0 +1,17 @@
+@mixin reset_button_defaults() {
+  display: block;
+  font-family: "Onest", sans-serif;
+  border: none;
+  border-radius: 0;
+  outline: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+@mixin hide_scrollbar() {
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
