@@ -1,0 +1,70 @@
+@use "../variables" as *;
+@use "../mixins" as *;
+
+.params_editor {
+  @include hide_scrollbar();
+  position: relative;
+  width: 100%;
+  max-width: 40rem;
+  padding: 2.5rem 2rem;
+  background-color: $white;
+  overflow: scroll;
+}
+
+.close_icon {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 1.125rem;
+  height: 1.125rem;
+  color: $black;
+  cursor: pointer;
+}
+
+.h2 {
+  width: fit-content;
+  margin: 0 auto;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.inputs {
+  max-width: 30rem;
+  margin: 2rem auto 0;
+}
+
+.input_container {
+  display: flex;
+  flex-direction: column;
+
+  &:not(:last-child) {
+    margin-bottom: 1.25rem;
+  }
+}
+
+.label {
+  font-size: .75rem;
+  font-weight: 500;
+  color: $gray_100;
+  margin-bottom: .25rem;
+}
+
+.input {
+  padding: 0.75rem;
+  font-family: "Onest", sans-serif;
+  font-size: .875rem;
+  font-weight: 500;
+  border: 1px solid $gray_100;
+  border-radius: .5rem;
+  color: $black;
+
+  &:focus {
+    outline: none;
+    border: 1px solid $black;
+  }
+}
+
+.result {
+  width: fit-content;
+  margin: 3rem auto 0;
+}

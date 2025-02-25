@@ -32,7 +32,7 @@ $toolbar_transition: 0.15s ease-out;
   border-radius: 0.5rem;
   transition: background-color $toolbar_transition;
 
-  imgdisabled {
+  &:disabled {
     color: $gray_200;
     cursor: not-allowed;
 

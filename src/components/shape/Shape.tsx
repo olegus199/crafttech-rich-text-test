@@ -1,26 +1,28 @@
 import html2canvas from "html2canvas";
 import Konva from "konva";
-import { FC, useEffect, useRef, useState } from "react";
-import { Group, Rect, Shape } from "react-konva";
+import { FC, useEffect, useRef } from "react";
+import { Group, Rect } from "react-konva";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux-hooks.tsx";
 import { selectTool } from "../../state/toolSlice.ts";
-import { NodeConfig } from "konva/lib/Node";
 import * as React from "react";
 import { editorShown } from "../../state/editorVisibleSlice.ts";
 import {
   selectKonvaImages,
 } from "../../state/konvaImagesSlice.ts";
 import { shapeColors } from "../../colors.ts";
-import { figureIdxToEditChanged, selectFigureIdxToEdit } from "../../state/figuresSlice.ts";
+import {
+  CustomShapesConfig,
+  figureIdxToEditChanged,
+  selectFigureIdxToEdit,
+} from "../../state/figuresSlice.ts";
 
 interface ShapeProps {
-  nodeConfig: NodeConfig;
+  nodeConfig: CustomShapesConfig;
   idx: number;
 }
 
-const CustomShape: FC<ShapeProps> = ({ nodeConfig, idx }) => {
-  const { width, height, x, y, id, type } = nodeConfig;
-  console.log(nodeConfig);
+const Shape: FC<ShapeProps> = ({ nodeConfig, idx }) => {
+  const { width, height, x, y, id, strokeWidth, stroke, fill } = nodeConfig;
 
   const selectedTool = useAppSelector(selectTool);
   const konvaImage = useAppSelector(selectKonvaImages).find((i) => i.id === id);
@@ -75,7 +77,14 @@ const CustomShape: FC<ShapeProps> = ({ nodeConfig, idx }) => {
         }
 
         el.dash([10, 10]);
-        dispatch(figureIdxToEditChanged(idx));
+        dispatch(figureIdxToEditChanged({
+          idx: idx,
+          inputs: {
+            width,
+            height,
+            strokeWidth,
+          },
+        }));
         return;
       case "cursor":
         if (id) {
@@ -107,7 +116,7 @@ const CustomShape: FC<ShapeProps> = ({ nodeConfig, idx }) => {
 
   useEffect(() => {
     if (selectedTool !== "edit") {
-      dispatch(figureIdxToEditChanged(null));
+      dispatch(figureIdxToEditChanged({ idx: null, inputs: null }));
     }
   }, [selectedTool]);
 
@@ -123,11 +132,11 @@ const CustomShape: FC<ShapeProps> = ({ nodeConfig, idx }) => {
         }}
         draggable
       >
-        <Shape
+        <Rect
           ref={rectRef}
-          type={type}
-          stroke={shapeColors.black}
-          fill={shapeColors.black}
+          stroke={stroke}
+          strokeWidth={strokeWidth}
+          fill={fill}
           width={width}
           height={height}
         />
@@ -136,4 +145,4 @@ const CustomShape: FC<ShapeProps> = ({ nodeConfig, idx }) => {
   );
 };
 
-export default CustomShape;
+export default Shape;

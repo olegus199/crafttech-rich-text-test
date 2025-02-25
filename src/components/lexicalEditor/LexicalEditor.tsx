@@ -20,9 +20,9 @@ import { konvaImagesAdded, selectKonvaImages } from "../../state/konvaImagesSlic
 import { selectEditorState } from "../../state/editorStateSlice.ts";
 
 const LexicalEditor: FC = () => {
-  const editorVisibilityParams = useAppSelector(selectEditorParams);
+  const editorVisibilityId = useAppSelector(selectEditorParams).id;
   const konvaImage = useAppSelector(selectKonvaImages)
-    .find((i) => i.id === editorVisibilityParams.id);
+    .find((i) => i.id === editorVisibilityId);
   const editorState = useAppSelector(selectEditorState);
 
   const dispatch = useAppDispatch();
@@ -59,11 +59,10 @@ const LexicalEditor: FC = () => {
   }, []);
 
   function handleSaveButtonClick(): void {
-    const { id } = editorVisibilityParams;
     const { html, lexicalJSON } = editorState;
 
     dispatch(konvaImagesAdded(
-      { id, html, lexicalJSON },
+      { id: editorVisibilityId, html, lexicalJSON },
     ));
   }
 

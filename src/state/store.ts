@@ -7,10 +7,13 @@ import { dropdownDimensionsSlice } from "./dropdownDimensionsSlice.ts";
 import { editorVisibleSlice } from "./editorVisibleSlice.ts";
 import { konvaImagesSlice } from "./konvaImagesSlice.ts";
 import { editorStateSlice } from "./editorStateSlice.ts";
+import { figuresSlice } from "./figuresSlice.ts";
+import { editFigureParamsSlice } from "./editFigureParamsSlice.ts";
 
 const RootReducer = combineSlices(
   toolSlice, dropdownVisibilitySlice, selectedTextFormatSlice, activeDropdownOptionSlice,
-  dropdownDimensionsSlice, editorVisibleSlice, konvaImagesSlice, editorStateSlice,
+  dropdownDimensionsSlice, editorVisibleSlice, konvaImagesSlice, editorStateSlice, figuresSlice,
+  editFigureParamsSlice,
 );
 
 export type RootState = ReturnType<typeof RootReducer>;

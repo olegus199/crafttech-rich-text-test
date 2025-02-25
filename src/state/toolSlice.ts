@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export type ToolKind = "cursor" | "shape";
+export type ToolKind = "cursor" | "shape" | "edit";
 
 interface InitialState {
   tool: ToolKind;

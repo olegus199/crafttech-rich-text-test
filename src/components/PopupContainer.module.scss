@@ -1,0 +1,27 @@
+@use "../variables" as *;
+@use "../mixins" as *;
+
+.wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  padding: 1rem;
+  background-color: rgba($black, .3);
+  backdrop-filter: blur(.25rem);
+  -webkit-backdrop-filter: blur(.25rem);
+  z-index: 999;
+}
+
+.content {
+  @include hide_scrollbar();
+  overflow: scroll;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  max-height: 70vh;
+}

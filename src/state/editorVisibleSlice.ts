@@ -21,11 +21,10 @@ export const editorVisibleSlice = createSlice({
   name: "editorVisible",
   initialState,
   reducers: {
-    editorShown(state: InitialState, action: PayloadAction<{ id: string }>) {
-      const { id } = action.payload;
+    editorShown(state: InitialState, action: PayloadAction<string>) {
       state.editorParams = {
         isVisible: true,
-        id,
+        id: action.payload,
       };
     },
     editorHidden(state: InitialState) {
