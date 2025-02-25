@@ -66,5 +66,18 @@
 
 .result {
   width: fit-content;
+  max-width: 30rem;
   margin: 3rem auto 0;
+}
+
+.save_button {
+  @include reset_button_defaults();
+  @include tool($white, $primary_100);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 10rem;
+  margin: 2.5rem auto 0;
 }

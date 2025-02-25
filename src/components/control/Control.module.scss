@@ -1,18 +1,6 @@
 @use "../../variables" as *;
 @use "../../mixins" as *;
 
-@mixin tool($color, $bg_color) {
-  display: flex;
-  align-items: center;
-  padding: .625rem .875rem;
-  font-size: 1rem;
-  font-weight: 500;
-  border-radius: .5rem;
-  color: $color;
-  background-color: $bg_color;
-  cursor: pointer;
-}
-
 .controls {
   display: flex;
   justify-content: space-between;

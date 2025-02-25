@@ -71,6 +71,11 @@ const ParamsEditor: FC = () => {
           />
         </svg>
       </div>
+      <button
+        onClick={handleClose}
+        className={styles.save_button}
+      >Сохранить
+      </button>
     </div>
   );
 };
