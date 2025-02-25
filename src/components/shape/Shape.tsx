@@ -1,7 +1,7 @@
 import html2canvas from "html2canvas";
 import Konva from "konva";
 import { FC, useEffect, useRef, useState } from "react";
-import { Group, Rect } from "react-konva";
+import { Group, Rect, Shape } from "react-konva";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux-hooks.tsx";
 import { selectTool } from "../../state/toolSlice.ts";
 import { NodeConfig } from "konva/lib/Node";
@@ -10,18 +10,26 @@ import { editorShown } from "../../state/editorVisibleSlice.ts";
 import {
   selectKonvaImages,
 } from "../../state/konvaImagesSlice.ts";
+import { shapeColors } from "../../colors.ts";
+import { figureIdxToEditChanged, selectFigureIdxToEdit } from "../../state/figuresSlice.ts";
 
 interface ShapeProps {
   nodeConfig: NodeConfig;
+  idx: number;
 }
 
-const Shape: FC<ShapeProps> = ({ nodeConfig: { width, height, x, y, id } }) => {
+const CustomShape: FC<ShapeProps> = ({ nodeConfig, idx }) => {
+  const { width, height, x, y, id, type } = nodeConfig;
+  console.log(nodeConfig);
+
   const selectedTool = useAppSelector(selectTool);
   const konvaImage = useAppSelector(selectKonvaImages).find((i) => i.id === id);
+  const figureIdxToEdit = useAppSelector(selectFigureIdxToEdit);
 
   const dispatch = useAppDispatch();
 
   const groupRef = useRef<Konva.Group>(null);
+  const rectRef = useRef<Konva.Rect>(null);
   const imageRef = useRef<Konva.Image>(null);
 
   async function renderImage(html: string): Promise<void> {
@@ -57,18 +65,26 @@ const Shape: FC<ShapeProps> = ({ nodeConfig: { width, height, x, y, id } }) => {
   }
 
   function handleGroupClick(): void {
-    if (selectedTool === "shape") {
-      return;
+    switch (selectedTool) {
+      case  "shape":
+        return;
+      case "edit":
+        const el = rectRef.current;
+        if (!el) {
+          return;
+        }
+
+        el.dash([10, 10]);
+        dispatch(figureIdxToEditChanged(idx));
+        return;
+      case "cursor":
+        if (id) {
+          dispatch(editorShown(id));
+        }
+        return;
+      default:
+        return;
     }
-
-    // imageRef.current?.hide();
-
-    if (id) {
-      dispatch(editorShown({
-        id,
-      }));
-    }
-
   }
 
   useEffect(() => {
@@ -77,6 +93,24 @@ const Shape: FC<ShapeProps> = ({ nodeConfig: { width, height, x, y, id } }) => {
     }
   }, [konvaImage]);
 
+  useEffect(() => {
+    const el = rectRef.current;
+
+    if (el) {
+      if (figureIdxToEdit === idx) {
+        el.dash([10, 10]);
+      } else {
+        el.dash([]);
+      }
+    }
+  }, [figureIdxToEdit]);
+
+  useEffect(() => {
+    if (selectedTool !== "edit") {
+      dispatch(figureIdxToEditChanged(null));
+    }
+  }, [selectedTool]);
+
   return (
     <>
       <Group
@@ -84,10 +118,16 @@ const Shape: FC<ShapeProps> = ({ nodeConfig: { width, height, x, y, id } }) => {
         x={x}
         y={y}
         onClick={handleGroupClick}
+        onDragMove={() => {
+          // some implementation
+        }}
         draggable
       >
-        <Rect
-          stroke={"black"}
+        <Shape
+          ref={rectRef}
+          type={type}
+          stroke={shapeColors.black}
+          fill={shapeColors.black}
           width={width}
           height={height}
         />
@@ -96,4 +136,4 @@ const Shape: FC<ShapeProps> = ({ nodeConfig: { width, height, x, y, id } }) => {
   );
 };
 
-export default Shape;
+export default CustomShape;
